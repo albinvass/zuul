@@ -1,0 +1,77 @@
+- hosts: localhost
+  gather_facts: false
+  vars:
+    workdir: "{{ playbook_dir }}/certs"
+    k8s_namespace: zuul
+  tasks:
+    - name: Create working directory
+      file:
+        state: directory
+        path: "{{ workdir }}/{{ item }}"
+      loop:
+        - ca
+        - zookeeper
+        - client
+
+    - name: Create CA signing key
+      community.crypto.openssl_privatekey:
+        path: "{{ workdir }}/ca/cakey.pem"
+
+    - name: Create certificate signing request
+      community.crypto.openssl_csr:
+        path: "{{ workdir }}/ca/ca.csr"
+        privatekey_path: "{{ workdir }}/ca/cakey.pem"
+        basic_constraints:
+          - "CA:TRUE"
+
+    - name: Create CA certificate
+      community.crypto.x509_certificate:
+        path: "{{ workdir }}/ca/cacert.pem"
+        privatekey_path: "{{ workdir }}/ca/cakey.pem"
+        csr_path: "{{ workdir }}/ca/ca.csr"
+        provider: selfsigned
+
+    - name: Create zookeeper private key
+      community.crypto.openssl_privatekey:
+        path: "{{ workdir }}/zookeeper/key.pem"
+
+    - name: Create certificate signing request
+      community.crypto.openssl_csr:
+        path: "{{ workdir }}/zookeeper/zookeeper.csr"
+        privatekey_path: "{{ workdir }}/zookeeper/key.pem"
+        common_name: zookeeper.zookeeper.{{ k8s_namespace }}.svc.cluster.local
+        subject_alt_name: "DNS:zookeeper.zookeeper"
+
+    - name: Sign zookeeper certificate
+      community.crypto.x509_certificate:
+        path: "{{ workdir }}/zookeeper/zookeeper.pem"
+        csr_path: "{{ workdir }}/zookeeper/zookeeper.csr"
+        ownca_path: "{{ workdir }}/ca/cacert.pem"
+        ownca_privatekey_path: "{{ workdir }}/ca/cakey.pem"
+        provider: ownca
+
+    - name: Create zookeeper keystore
+      copy:
+        content: |
+          {{ lookup('file', workdir + '/zookeeper/zookeeper.pem') }}
+          {{ lookup('file', workdir + '/zookeeper/key.pem') }}
+        dest: "{{ workdir }}/zookeeper/keystore.pem"
+
+
+    - name: Create client key
+      community.crypto.openssl_privatekey:
+        path: "{{ workdir }}/client/clientkey.pem"
+
+    - name: Create client certificate request
+      community.crypto.openssl_csr:
+        path: "{{ workdir }}/client/client.csr"
+        privatekey_path: "{{ workdir }}/client/clientkey.pem"
+        common_name: client
+
+    - name: Create client certificate
+      community.crypto.x509_certificate:
+        path: "{{ workdir }}/client/client.pem"
+        csr_path: "{{ workdir }}/client/client.csr"
+        ownca_path: "{{ workdir }}/ca/cacert.pem"
+        ownca_privatekey_path: "{{ workdir }}/ca/cakey.pem"
+        provider: ownca

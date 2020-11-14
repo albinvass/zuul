@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zookeeper
+spec:
+  selector:
+    matchLabels:
+      app: zookeeper
+  serviceName: zookeeper
+  replicas: {{ .Values.count }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/zoo-conf.yaml") . | sha256sum }}
+      labels:
+        app: zookeeper
+    spec:
+      initContainers:
+      - name: var-lib-zookeeper-permissions
+        image: busybox
+        command: ["chown", "1000:1000", "-R", "/var/lib/zookeeper"]
+        volumeMounts:
+        - name: datadir
+          mountPath: /var/lib/zookeeper
+        securityContext:
+          runAsUser: 0
+      containers:
+      - name: zookeeper
+        image: zookeeper
+        ports:
+        - containerPort: 2281
+          name: client-tls
+        - containerPort: 2888
+          name: server
+        - containerPort: 3888
+          name: leader-election
+        env:
+        - name: ZOO_MY_ID
+          value: "1"
+        volumeMounts:
+        - name: datadir
+          mountPath: /var/lib/zookeeper
+        - name: zookeeper-config
+          mountPath: /conf/
+        - name: zookeeper-tls
+          mountPath: /ca/
+      volumes:
+      - name: zookeeper-config
+        configMap:
+          name: zookeeper-config
+      - name: zookeeper-tls
+        secret:
+          secretName: zookeeper-tls
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+  volumeClaimTemplates:
+  - metadata:
+      name: datadir
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi

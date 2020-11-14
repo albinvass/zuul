@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zookeeper-config
+data:
+  zoo.cfg: |
+    # Basic conf
+    tickTime=2000
+    dataDir=/var/lib/zookeeper/
+    initLimit=5
+    syncLimit=2
+    server.1=zookeeper-1.zookeeper:2888:3888
+
+    # Necessary for TLS support
+    serverCnxnFactory=org.apache.zookeeper.server.NettyServerCnxnFactory
+
+    # Client TLS configuration
+    secureClientPort=2281
+    ssl.keyStore.location=/ca/keystore.pem
+    ssl.trustStore.location=/ca/cacert.pem
+
+    # Server TLS configuration
+    sslQuorum=true
+    ssl.quorum.keyStore.location=/ca/keystore.pem
+    ssl.quorum.trustStore.location=/ca/cacert.pem
+
+    autopurge.purgeInterval=6
+  log4j.properties: |-
+    zookeeper.root.logger=CONSOLE
+    zookeeper.console.threshold=INFO
+    log4j.rootLogger=\${zookeeper.root.logger}
+    log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
+    log4j.appender.CONSOLE.Threshold=\${zookeeper.console.threshold}
+    log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
+    log4j.appender.CONSOLE.layout.ConversionPattern=%d{ISO8601} [myid:%X{myid}] - %-5p [%t:%C{1}@%L] - %m%n
