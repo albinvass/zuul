@@ -1,0 +1,69 @@
+scheduler:
+  config: |-
+    [zookeeper]
+    hosts=zookeeper-0.zookeeper:2281
+    tls_cert=/cert/client.pem
+    tls_key=/cert/clientkey.pem
+    tls_ca=/cert/cacert.pem
+
+    [gearman]
+    server=zuul-scheduler-0.zuul-scheduler
+
+    [gearman_server]
+    start=true
+
+    [scheduler]
+    tenant_config=/tenants/main.yaml
+  tenants: |-
+    - tenant:
+        name: vassast
+        source: {}
+executor:
+  config: |-
+  config: |-
+    [zookeeper]
+    hosts=zookeeper-0.zookeeper:2281
+    tls_cert=/cert/client.pem
+    tls_key=/cert/clientkey.pem
+    tls_ca=/cert/cacert.pem
+
+    [gearman]
+    server=zuul-scheduler-0.zuul-scheduler
+web:
+  config: |-
+    [zookeeper]
+    hosts=zookeeper-0.zookeeper:2281
+    tls_cert=/cert/client.pem
+    tls_key=/cert/clientkey.pem
+    tls_ca=/cert/cacert.pem
+
+    [gearman]
+    server=zuul-scheduler-0.zuul-scheduler
+
+    [web]
+    root=zuul.vassast.com
+    listen=0.0.0.0
+launcher:
+  config: |-
+    zookeeper-servers:
+      - host: zookeeper-0.zookeeper
+        port: 2281
+    zookeeper-tls:
+      cert: /cert/client.pem
+      key: /cert/clientkey.pem
+      ca: /cert/cacert.pem
+    labels:
+      - name: alpine-pod
+    providers:
+      - name: kubernetes-digitalocean
+        driver: kubernetes
+        pools:
+          - name: main
+            labels:
+              - name: alpine-pod
+                type: pod
+                image: alpine
+mysql:
+  count: 1
+zookeeper:
+  count: 1

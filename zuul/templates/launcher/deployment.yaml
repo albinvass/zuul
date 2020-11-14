@@ -14,6 +14,7 @@ spec:
       labels:
         app: nodepool-launcher
     spec:
+      serviceAccountName: nodepool-launcher
       containers:
       - name: nodepool-launcher
         image: zuul/nodepool-launcher

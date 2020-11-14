@@ -1,0 +1,52 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nodepool-launcher
+rules:
+- apiGroups: [""]
+  verbs:
+  - list
+  - watch
+  - get
+  - create
+  - delete
+  - patch
+  - update
+  resources:
+  - pods
+  - namespaces
+  - serviceaccounts
+  - secrets
+  - pods/exec
+  - pods/logs
+  - pods/portforward
+- apiGroups: ["rbac.authorization.k8s.io"]
+  verbs:
+  - list
+  - watch
+  - get
+  - create
+  - delete
+  resources:
+  - roles
+  - rolebindings
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nodepool-launcher
+---
+
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: nodepool-launcher
+subjects:
+- kind: ServiceAccount
+  name: nodepool-launcher
+  namespace: {{ .Release.Namespace | quote }}
+roleRef:
+  kind: ClusterRole
+  name: nodepool-launcher
+  apiGroup: rbac.authorization.k8s.io
