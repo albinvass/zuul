@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zuul-web
+  labels:
+    app: zuul-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zuul-web
+  template:
+    metadata:
+      labels:
+        app: zuul-web
+    spec:
+      containers:
+      - name: zuul-web
+        image: zuul/zuul-web
+        command: ["zuul-web", "-d", "-f"]
+        ports:
+        - containerPort: 9000
+          name: http
+        volumeMounts:
+        - name: zuul-conf
+          mountPath: /etc/zuul/
+        - name: zookeeper-tls
+          mountPath: /cert/
+      volumes:
+      - name: zuul-conf
+        configMap:
+          name: zuul-web-config
+      - name: zookeeper-tls
+        secret:
+          secretName: zookeeper-tls

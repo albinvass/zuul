@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: zuul-scheduler
+  labels:
+    app: zuul-scheduler
+spec:
+  clusterIP: None
+  ports:
+  - port: 4730
+    name: gearman
+  selector:
+    app: zuul-scheduler

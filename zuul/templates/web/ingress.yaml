@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: zuul-web
+spec:
+  rules:
+  - host: zuul.vassast.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          serviceName: zuul-web
+          servicePort: 9000

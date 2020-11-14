@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zuul-scheduler-config
+data:
+  zuul.conf:
+    {{- .Values.scheduler.config | toYaml | indent 4 }}

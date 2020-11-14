@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zuul-scheduler
+spec:
+  selector:
+    matchLabels:
+      app: zuul-scheduler
+  serviceName: zuul-scheduler
+  replicas: {{ .Values.count }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/scheduler/zuul-conf.yaml") . | sha256sum }}
+      labels:
+        app: zuul-scheduler
+    spec:
+      initContainers:
+      - name: var-lib-zuul-permissions
+        image: busybox
+        command: ["chown", "1000:1000", "-R", "/var/lib/zuul"]
+        volumeMounts:
+        - name: datadir
+          mountPath: /var/lib/zuul
+        securityContext:
+          runAsUser: 0
+      containers:
+      - name: zuul-scheduler
+        image: zuul/zuul-scheduler
+        command: ["zuul-scheduler", "-d", "-f"]
+        ports:
+        - containerPort: 4730
+          name: gearman
+        volumeMounts:
+        - name: datadir
+          mountPath: /var/lib/zuul
+        - name: zuul-scheduler-config
+          mountPath: /etc/zuul/
+        - name: tenants-config
+          mountPath: /tenants/
+        - name: zookeeper-tls
+          mountPath: /cert/
+      volumes:
+      - name: zuul-scheduler-config
+        configMap:
+          name: zuul-scheduler-config
+      - name: tenants-config
+        configMap:
+          name: tenants-config
+      - name: zookeeper-tls
+        secret:
+          secretName: zookeeper-tls
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+  volumeClaimTemplates:
+  - metadata:
+      name: datadir
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi

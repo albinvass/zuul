@@ -27,7 +27,7 @@ data:
     autopurge.purgeInterval=6
   log4j.properties: |-
     zookeeper.root.logger=CONSOLE
-    zookeeper.console.threshold=INFO
+    zookeeper.console.threshold=DEBUG
     log4j.rootLogger=\${zookeeper.root.logger}
     log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
     log4j.appender.CONSOLE.Threshold=\${zookeeper.console.threshold}

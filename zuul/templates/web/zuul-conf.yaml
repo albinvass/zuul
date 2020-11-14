@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zuul-web-config
+data:
+  zuul.conf:
+    {{- .Values.web.config | toYaml | indent 4 }}

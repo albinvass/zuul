@@ -1,6 +1,38 @@
 scheduler:
-executor:
+  config: |-
+    [zookeeper]
+    hosts=zookeeper-0.zookeeper:2281
+    tls_cert=/cert/client.pem
+    tls_key=/cert/clientkey.pem
+    tls_ca=/cert/cacert.pem
+
+    [gearman]
+    server=zuul-scheduler-0.zuul-scheduler
+
+    [gearman_server]
+    start=true
+
+    [scheduler]
+    tenant_config=/tenants/main.yaml
+  tenants: |-
+    - tenant:
+        name: vassast
+        source: {}
 web:
-launcher:
+  config: |-
+    [zookeeper]
+    hosts=zookeeper-0.zookeeper:2281
+    tls_cert=/cert/client.pem
+    tls_key=/cert/clientkey.pem
+    tls_ca=/cert/cacert.pem
+
+    [gearman]
+    server=zuul-scheduler-0.zuul-scheduler
+
+    [web]
+    root=zuul.vassast.com
+    listen=0.0.0.0
 mysql:
+  count: 1
 zookeeper:
+  count: 1
