@@ -18,6 +18,17 @@ scheduler:
     - tenant:
         name: vassast
         source: {}
+executor:
+  config: |-
+  config: |-
+    [zookeeper]
+    hosts=zookeeper-0.zookeeper:2281
+    tls_cert=/cert/client.pem
+    tls_key=/cert/clientkey.pem
+    tls_ca=/cert/cacert.pem
+
+    [gearman]
+    server=zuul-scheduler-0.zuul-scheduler
 web:
   config: |-
     [zookeeper]

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zuul-executor
+spec:
+  selector:
+    matchLabels:
+      app: zuul-executor
+  serviceName: zuul-executor
+  replicas: {{ .Values.count }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/executor/zuul-conf.yaml") . | sha256sum }}
+      labels:
+        app: zuul-executor
+    spec:
+      containers:
+      - name: zuul-executor
+        image: zuul/zuul-executor
+        command: ["zuul-executor", "-d", "-f"]
+        ports:
+        - containerPort: 7900
+          name: finger
+        volumeMounts:
+        - name: datadir
+          mountPath: /var/lib/zuul
+        - name: zuul-executor-config
+          mountPath: /etc/zuul/
+        - name: zookeeper-tls
+          mountPath: /cert/
+        securityContext:
+          privileged: true
+      volumes:
+      - name: zuul-executor-config
+        configMap:
+          name: zuul-executor-config
+      - name: zookeeper-tls
+        secret:
+          secretName: zookeeper-tls
+  volumeClaimTemplates:
+  - metadata:
+      name: datadir
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi
+

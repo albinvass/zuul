@@ -16,11 +16,13 @@
     - name: Create CA signing key
       community.crypto.openssl_privatekey:
         path: "{{ workdir }}/ca/cakey.pem"
+        format: pkcs8
 
     - name: Create certificate signing request
       community.crypto.openssl_csr:
         path: "{{ workdir }}/ca/ca.csr"
         privatekey_path: "{{ workdir }}/ca/cakey.pem"
+        common_name: caroot
         basic_constraints:
           - "CA:TRUE"
 
@@ -29,11 +31,13 @@
         path: "{{ workdir }}/ca/cacert.pem"
         privatekey_path: "{{ workdir }}/ca/cakey.pem"
         csr_path: "{{ workdir }}/ca/ca.csr"
+        selfsigned_not_before: -5h
         provider: selfsigned
 
     - name: Create zookeeper private key
       community.crypto.openssl_privatekey:
         path: "{{ workdir }}/zookeeper/key.pem"
+        format: pkcs8
 
     - name: Create certificate signing request
       community.crypto.openssl_csr:
@@ -48,6 +52,7 @@
         csr_path: "{{ workdir }}/zookeeper/zookeeper.csr"
         ownca_path: "{{ workdir }}/ca/cacert.pem"
         ownca_privatekey_path: "{{ workdir }}/ca/cakey.pem"
+        ownca_not_before: -5h
         provider: ownca
 
     - name: Create zookeeper keystore
@@ -61,6 +66,7 @@
     - name: Create client key
       community.crypto.openssl_privatekey:
         path: "{{ workdir }}/client/clientkey.pem"
+        format: pkcs8
 
     - name: Create client certificate request
       community.crypto.openssl_csr:
@@ -74,4 +80,5 @@
         csr_path: "{{ workdir }}/client/client.csr"
         ownca_path: "{{ workdir }}/ca/cacert.pem"
         ownca_privatekey_path: "{{ workdir }}/ca/cakey.pem"
+        ownca_not_before: -5h
         provider: ownca
