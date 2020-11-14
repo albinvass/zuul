@@ -43,6 +43,17 @@ web:
     [web]
     root=zuul.vassast.com
     listen=0.0.0.0
+launcher:
+  config: |-
+    zookeeper-servers:
+      - host: zookeeper-0.zookeeper
+        port: 2281
+    zookeeper-tls:
+      cert: /cert/client.pem
+      key: /cert/clientkey.pem
+      ca: /cert/cacert.pem
+    labels: []
+    providers: []
 mysql:
   count: 1
 zookeeper:

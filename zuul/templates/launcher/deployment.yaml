@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodepool-launcher
+  labels:
+    app: nodepool-launcher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodepool-launcher
+  template:
+    metadata:
+      labels:
+        app: nodepool-launcher
+    spec:
+      containers:
+      - name: nodepool-launcher
+        image: zuul/nodepool-launcher
+        command: ["nodepool-launcher", "-d", "-f"]
+        volumeMounts:
+        - name: nodepool-config
+          mountPath: /etc/nodepool
+        - name: zookeeper-tls
+          mountPath: /cert/
+      volumes:
+      - name: nodepool-config
+        configMap:
+          name: nodepool-config
+      - name: zookeeper-tls
+        secret:
+          secretName: zookeeper-tls
