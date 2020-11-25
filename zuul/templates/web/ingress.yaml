@@ -1,14 +1,22 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: zuul-web
+  annotations:
+    cert-manager.io/issuer: "zuul-vassast-org"
 spec:
+  tls:
+  - hosts:
+    - zuul.vassast.org
+    secretName: tls-zuul-vassast-org
   rules:
-  - host: zuul.vassast.com
+  - host: zuul.vassast.org
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
-          serviceName: zuul-web
-          servicePort: 9000
+          service:
+            name: zuul-web
+            port:
+              number: 80

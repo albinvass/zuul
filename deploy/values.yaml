@@ -14,10 +14,32 @@ scheduler:
 
     [scheduler]
     tenant_config=/tenants/main.yaml
+
+    [connection "github"]
+    driver=github
+    app_id=89996
+    app_key=/etc/github/github.key
+    webhook_token=%(ZUUL_GITHUB_WEBHOOK_TOKEN)s
+
+    [connection "opendev"]
+    driver=git
+    baseurl=https://opendev.org/
+
+    [web]
+    root=zuul.vassast.org
+    listen_address=0.0.0.0
   tenants: |-
     - tenant:
         name: vassast
-        source: {}
+        source:
+          opendev:
+            untrusted-projects:
+              - zuul/zuul-jobs
+          github:
+            config-projects:
+              - albinvass/zuul-config
+            untrusted-projects:
+              - albinvass/trckrnews
 executor:
   config: |-
   config: |-
@@ -26,6 +48,16 @@ executor:
     tls_cert=/cert/client.pem
     tls_key=/cert/clientkey.pem
     tls_ca=/cert/cacert.pem
+
+    [connection "github"]
+    driver=github
+    app_id=89996
+    app_key=/etc/github/github.key
+    webhook_token=%(ZUUL_GITHUB_WEBHOOK_TOKEN)s
+
+    [connection "opendev"]
+    driver=git
+    baseurl=https://opendev.org/
 
     [gearman]
     server=zuul-scheduler-0.zuul-scheduler
@@ -41,8 +73,8 @@ web:
     server=zuul-scheduler-0.zuul-scheduler
 
     [web]
-    root=zuul.vassast.com
-    listen=0.0.0.0
+    root=zuul.vassast.org
+    listen_address=0.0.0.0
 launcher:
   config: |-
     zookeeper-servers:

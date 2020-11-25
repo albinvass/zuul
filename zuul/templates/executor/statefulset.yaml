@@ -29,8 +29,16 @@ spec:
           mountPath: /etc/zuul/
         - name: zookeeper-tls
           mountPath: /cert/
+        - name: zuul-github
+          mountPath: /etc/github/app.key
         securityContext:
           privileged: true
+        env:
+        - name: ZUUL_GITHUB_WEBHOOK_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: zuul-github
+              key: webhook-token
       volumes:
       - name: zuul-executor-config
         configMap:
@@ -38,6 +46,9 @@ spec:
       - name: zookeeper-tls
         secret:
           secretName: zookeeper-tls
+      - name: zuul-github
+        secret:
+          secretName: zuul-github
   volumeClaimTemplates:
   - metadata:
       name: datadir

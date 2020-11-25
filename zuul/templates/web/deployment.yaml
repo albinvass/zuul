@@ -11,8 +11,6 @@ spec:
       app: zuul-web
   template:
     metadata:
-      annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/web/zuul-conf.yaml") . | sha256sum }}
       labels:
         app: zuul-web
     spec:
