@@ -31,6 +31,8 @@ scheduler:
   tenants: |-
     - tenant:
         name: vassast
+        exclude-unprotected-branches: true
+        report-build-page: true
         source:
           opendev:
             untrusted-projects:
