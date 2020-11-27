@@ -30,7 +30,7 @@ spec:
         - name: zookeeper-tls
           mountPath: /cert/
         - name: zuul-github
-          mountPath: /etc/github/app.key
+          mountPath: /etc/github/
         securityContext:
           privileged: true
         env:

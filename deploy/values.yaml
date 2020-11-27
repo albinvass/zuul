@@ -25,6 +25,10 @@ scheduler:
     driver=git
     baseurl=https://opendev.org/
 
+    [connection "mysql"]
+    driver=sql
+    dburi=mysql+pymysql://zuul:%(ZUUL_MYSQL_PASSWORD)s@mysql-0.mysql/zuul
+
     [web]
     root=zuul.vassast.org
     listen_address=0.0.0.0
@@ -44,7 +48,6 @@ scheduler:
               - albinvass/trckrnews
               - albinvass/zuul
 executor:
-  config: |-
   config: |-
     [zookeeper]
     hosts=zookeeper-0.zookeeper:2281
@@ -72,6 +75,16 @@ web:
     tls_key=/cert/clientkey.pem
     tls_ca=/cert/cacert.pem
 
+    [connection "github"]
+    driver=github
+    app_id=89996
+    app_key=/etc/github/github.key
+    webhook_token=%(ZUUL_GITHUB_WEBHOOK_TOKEN)s
+
+    [connection "mysql"]
+    driver=sql
+    dburi=mysql+pymysql://zuul:%(ZUUL_MYSQL_PASSWORD)s@mysql-0.mysql/zuul
+
     [gearman]
     server=zuul-scheduler-0.zuul-scheduler
 
@@ -89,6 +102,7 @@ launcher:
       ca: /cert/cacert.pem
     labels:
       - name: alpine-pod
+      - name: fedora-pod
     providers:
       - name: kubernetes-digitalocean
         driver: kubernetes
@@ -97,7 +111,12 @@ launcher:
             labels:
               - name: alpine-pod
                 type: pod
-                image: alpine
+                image: ghcr.io/albinvass/alpine-python:latest
+                image-pull: Always
+              - name: fedora-pod
+                type: pod
+                image: ghcr.io/albinvass/fedora-python:latest
+                image-pull: Always
 mysql:
   count: 1
 zookeeper:

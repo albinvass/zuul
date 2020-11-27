@@ -41,13 +41,18 @@ spec:
         - name: zookeeper-tls
           mountPath: /cert/
         - name: zuul-github
-          mountPath: /etc/github/app.key
+          mountPath: /etc/github/
         env:
         - name: ZUUL_GITHUB_WEBHOOK_TOKEN
           valueFrom:
             secretKeyRef:
               name: zuul-github
               key: webhook-token
+        - name: ZUUL_MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: zuul-mysql
+              key: password
       volumes:
       - name: zuul-scheduler-config
         configMap:
