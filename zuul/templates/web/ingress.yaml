@@ -20,3 +20,79 @@ spec:
             name: zuul-web
             port:
               number: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: zuul-web-api-connection
+  annotations:
+    cert-manager.io/issuer: "zuul-vassast-org"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /api/connection/$1
+spec:
+  tls:
+  - hosts:
+    - zuul.vassast.org
+    secretName: tls-zuul-vassast-org
+  rules:
+  - host: zuul.vassast.org
+    http:
+      paths:
+      - path: /api/connection/(.*)$
+        pathType: Prefix
+        backend:
+          service:
+            name: zuul-web
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: zuul-web-api-console-stream
+  annotations:
+    cert-manager.io/issuer: "zuul-vassast-org"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /api/tenant/vassast/console-stream
+spec:
+  tls:
+  - hosts:
+    - zuul.vassast.org
+    secretName: tls-zuul-vassast-org
+  rules:
+  - host: zuul.vassast.org
+    http:
+      paths:
+      - path: /api/console-stream
+        pathType: Prefix
+        backend:
+          service:
+            name: zuul-web
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: zuul-web-api-tenant
+  annotations:
+    cert-manager.io/issuer: "zuul-vassast-org"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /api/tenant/vassast/$1
+spec:
+  tls:
+  - hosts:
+    - zuul.vassast.org
+    secretName: tls-zuul-vassast-org
+  rules:
+  - host: zuul.vassast.org
+    http:
+      paths:
+      - path: /api/(.*)$
+        pathType: Prefix
+        backend:
+          service:
+            name: zuul-web
+            port:
+              number: 80
