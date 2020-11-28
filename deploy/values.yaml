@@ -45,6 +45,7 @@ scheduler:
             config-projects:
               - albinvass/zuul-config
             untrusted-projects:
+              - albinvass/zuul-jobs
               - albinvass/trckrnews
               - albinvass/zuul
 executor:

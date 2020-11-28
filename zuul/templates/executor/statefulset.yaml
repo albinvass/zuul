@@ -34,6 +34,8 @@ spec:
         securityContext:
           privileged: true
         env:
+        - name: ANSIBLE_EXTRA_PACKAGES
+          value: "boto3 botocore"
         - name: ZUUL_GITHUB_WEBHOOK_TOKEN
           valueFrom:
             secretKeyRef:
