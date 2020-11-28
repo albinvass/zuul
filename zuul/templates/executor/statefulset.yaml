@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: zuul-executor
-        image: zuul/zuul-executor
+        image: {{ .Values.executor.image | quote }}
         command: ["zuul-executor", "-d", "-f"]
         ports:
         - containerPort: 7900

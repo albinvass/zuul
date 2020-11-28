@@ -30,7 +30,7 @@ scheduler:
     dburi=mysql+pymysql://zuul:%(ZUUL_MYSQL_PASSWORD)s@mysql-0.mysql/zuul
 
     [web]
-    root=zuul.vassast.org
+    root=https://zuul.vassast.org
     listen_address=0.0.0.0
   tenants: |-
     - tenant:
@@ -89,7 +89,7 @@ web:
     server=zuul-scheduler-0.zuul-scheduler
 
     [web]
-    root=zuul.vassast.org
+    root=https://zuul.vassast.org
     listen_address=0.0.0.0
 launcher:
   config: |-
