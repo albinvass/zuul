@@ -46,9 +46,12 @@ scheduler:
               - albinvass/zuul-config
             untrusted-projects:
               - albinvass/zuul-jobs
-              - albinvass/trckrnews
+              - albinvass/hatty
+              - albinvass/illwill
               - albinvass/zuul
 executor:
+  image: ghcr.io/albinvass/zuul-executor:nossh
+  imagePullPolicy: Always
   config: |-
     [zookeeper]
     hosts=zookeeper-0.zookeeper:2281

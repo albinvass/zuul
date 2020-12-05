@@ -19,6 +19,9 @@ spec:
       - name: nodepool-launcher
         image: zuul/nodepool-launcher
         command: ["nodepool-launcher", "-d", "-f"]
+        ports:
+        - name: http
+          containerPort: 8005
         volumeMounts:
         - name: nodepool-config
           mountPath: /etc/nodepool
