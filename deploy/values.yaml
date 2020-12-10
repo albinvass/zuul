@@ -47,6 +47,7 @@ scheduler:
             untrusted-projects:
               - albinvass/zuul-jobs
               - albinvass/hatty
+              - albinvass/vinescore
               - albinvass/illwill
               - albinvass/zuul
 executor:
