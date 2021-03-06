@@ -50,6 +50,8 @@ scheduler:
               - albinvass/vinescore
               - albinvass/illwill
               - albinvass/zuul
+              - dhackz/wurg:
+                  exclude-unprotected-branches: false
 executor:
   image: ghcr.io/albinvass/zuul-executor:nossh
   imagePullPolicy: Always
