@@ -30,6 +30,8 @@ spec:
         env:
         - name: STATSD_HOST
           value: statsd-0.statsd
+        - name: STATSD_PORT
+          value: "8125"
       volumes:
       - name: nodepool-config
         configMap:

@@ -55,8 +55,6 @@ scheduler:
               - dhackz/wurg:
                   exclude-unprotected-branches: false
 executor:
-  image: ghcr.io/albinvass/zuul-executor:nossh
-  imagePullPolicy: Always
   config: |-
     [statsd]
     server=statsd-0.statsd
