@@ -25,8 +25,7 @@ scheduler:
     driver=git
     baseurl=https://opendev.org/
 
-    [connection "mysql"]
-    driver=sql
+    [database]
     dburi=mysql+pymysql://zuul:%(ZUUL_MYSQL_PASSWORD)s@mysql-0.mysql/zuul
 
     [web]
@@ -88,8 +87,7 @@ web:
     app_key=/etc/github/github.key
     webhook_token=%(ZUUL_GITHUB_WEBHOOK_TOKEN)s
 
-    [connection "mysql"]
-    driver=sql
+    [database]
     dburi=mysql+pymysql://zuul:%(ZUUL_MYSQL_PASSWORD)s@mysql-0.mysql/zuul
 
     [gearman]
