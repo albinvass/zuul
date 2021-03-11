@@ -47,6 +47,7 @@ web:
     root=zuul.vassast.com
     listen=0.0.0.0
 launcher:
+  env: []
   config: |-
     zookeeper-servers:
       - host: zookeeper-0.zookeeper

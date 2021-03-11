@@ -1,5 +1,8 @@
 scheduler:
   config: |-
+    [statsd]
+    server=statsd-0.statsd
+
     [zookeeper]
     hosts=zookeeper-0.zookeeper:2281
     tls_cert=/cert/client.pem
@@ -55,6 +58,9 @@ executor:
   image: ghcr.io/albinvass/zuul-executor:nossh
   imagePullPolicy: Always
   config: |-
+    [statsd]
+    server=statsd-0.statsd
+
     [zookeeper]
     hosts=zookeeper-0.zookeeper:2281
     tls_cert=/cert/client.pem
@@ -75,6 +81,9 @@ executor:
     server=zuul-scheduler-0.zuul-scheduler
 web:
   config: |-
+    [statsd]
+    server=statsd-0.statsd
+
     [zookeeper]
     hosts=zookeeper-0.zookeeper:2281
     tls_cert=/cert/client.pem

@@ -27,6 +27,9 @@ spec:
           mountPath: /etc/nodepool
         - name: zookeeper-tls
           mountPath: /cert/
+        env:
+        - name: STATSD_HOST
+          value: statsd-0.statsd
       volumes:
       - name: nodepool-config
         configMap:
