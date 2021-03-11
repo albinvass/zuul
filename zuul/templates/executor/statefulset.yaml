@@ -32,6 +32,8 @@ spec:
           mountPath: /cert/
         - name: zuul-github
           mountPath: /etc/github/
+        - name: zuul-ssh
+          mountPath: /var/ssh/
         securityContext:
           privileged: true
         env:
@@ -49,6 +51,9 @@ spec:
       - name: zookeeper-tls
         secret:
           secretName: zookeeper-tls
+      - name: zuul-ssh
+        secret:
+          secretName: zuul-ssh
       - name: zuul-github
         secret:
           secretName: zuul-github

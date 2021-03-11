@@ -32,6 +32,16 @@ spec:
           value: statsd-0.statsd
         - name: STATSD_PORT
           value: "8125"
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: nodepool-aws
+              key: aws-access-key
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nodepool-aws
+              key: aws-secret-key
       volumes:
       - name: nodepool-config
         configMap:
