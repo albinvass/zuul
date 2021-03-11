@@ -1,3 +1,5 @@
+statsd:
+  count: 1
 scheduler:
   image: zuul/zuul-scheduler
   config: |-

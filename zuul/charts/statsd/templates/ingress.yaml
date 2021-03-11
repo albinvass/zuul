@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: graphite
+  annotations:
+    cert-manager.io/issuer: "zuul-vassast-org"
+spec:
+  tls:
+  - hosts:
+    - graphite.vassast.org
+    secretName: tls-graphite-vassast-org
+  rules:
+  - host: graphite.vassast.org
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: statsd
+            port:
+              number: 80
