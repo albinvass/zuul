@@ -52,6 +52,7 @@ scheduler:
               - albinvass/vinescore
               - albinvass/illwill
               - albinvass/zuul
+              - albinvass/fedora-python
               - dhackz/wurg:
                   exclude-unprotected-branches: false
 executor:
