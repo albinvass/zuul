@@ -76,6 +76,10 @@ executor:
     driver=git
     baseurl=https://opendev.org/
 
+    [executor]
+    private_key_file=/var/ssh/zuul
+    trusted_ro_paths=/var/ssh
+
     [gearman]
     server=zuul-scheduler-0.zuul-scheduler
 web:
@@ -105,7 +109,6 @@ web:
     root=https://zuul.vassast.org
     listen_address=0.0.0.0
 launcher:
-  image: ghcr.io/albinvass/nodepool-launcher
   config: |-
     zookeeper-servers:
     - host: zookeeper-0.zookeeper
@@ -117,7 +120,7 @@ launcher:
     labels:
     - name: alpine-pod
     - name: fedora-pod
-    - name: ec2-t2-micro-fedora-33
+    - name: ec2-t3-micro-ubuntu-20.04
     providers:
     - name: kubernetes-digitalocean
       driver: kubernetes
@@ -132,20 +135,25 @@ launcher:
           type: pod
           image: ghcr.io/albinvass/fedora-python:latest
           image-pull: Always
-    - name: aws-eu-west-1
+    - name: aws-eu-north-1
       driver: aws
-      region-name: eu-west-1
+      region-name: eu-north-1
       security-group-id: sg-0bb000e185ea4a7bc
       subnet-id: subnet-0cddf50a540db74aa
       cloud-images:
-      - name: fedora-33
-        image-id: ami-044a473797ac1fb5a
-        username: fedora
-      labels:
-      - name: ec2-t2--micro-fedora-33
-        instance-type: t2-micro
-        cloud-image: fedora-33
-        key-name: zuul-ssh
+      - name: ubuntu-20.04
+        image-id: ami-0ed17ff3d78e74700
+        username: ubuntu
+      pools:
+      - name: main
+        security-group-id: sg-0bb000e185ea4a7bc
+        subnet-id: subnet-0cddf50a540db74aa
+        max-servers: 5
+        labels:
+        - name: ec2-t3-micro-ubuntu-20.04
+          instance-type: t3.micro
+          cloud-image: ubuntu-20.04
+          key-name: zuul-ssh
 mysql:
   count: 1
 zookeeper:

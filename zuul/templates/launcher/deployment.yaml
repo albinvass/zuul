@@ -17,7 +17,8 @@ spec:
       serviceAccountName: nodepool-launcher
       containers:
       - name: nodepool-launcher
-        image: zuul/nodepool-launcher
+        image: {{ .Values.launcher.image | quote }}
+        imagePullPolicy: {{ .Values.launcher.imagePullPolicy | quote }}
         command: ["nodepool-launcher", "-d", "-f"]
         ports:
         - name: http

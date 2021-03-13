@@ -47,6 +47,8 @@ web:
     root=zuul.vassast.com
     listen=0.0.0.0
 launcher:
+  image: zuul/nodepool
+  imagePullPolicy: IfNotPresent
   env: []
   config: |-
     zookeeper-servers:

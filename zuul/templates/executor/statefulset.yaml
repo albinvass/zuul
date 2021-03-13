@@ -54,6 +54,10 @@ spec:
       - name: zuul-ssh
         secret:
           secretName: zuul-ssh
+          items:
+          - key: zuul
+            path: zuul
+            mode: 0600
       - name: zuul-github
         secret:
           secretName: zuul-github
