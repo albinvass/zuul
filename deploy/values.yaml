@@ -129,10 +129,14 @@ launcher:
         labels:
         - name: alpine-pod
           type: pod
+          cpu: "1"
+          memory: "500"
           image: ghcr.io/albinvass/alpine-python:latest
           image-pull: Always
         - name: fedora-pod
           type: pod
+          cpu: "1"
+          memory: "500"
           image: ghcr.io/albinvass/fedora-python:latest
           image-pull: Always
     - name: aws-eu-north-1
