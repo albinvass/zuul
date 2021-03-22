@@ -43,6 +43,11 @@ spec:
             secretKeyRef:
               name: nodepool-aws
               key: aws-secret-key
+        - name: DIGITALOCEAN_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: nodepool-digitalocean
+              key: access-token
       volumes:
       - name: nodepool-config
         configMap:
