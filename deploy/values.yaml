@@ -55,8 +55,7 @@ scheduler:
               - albinvass/illwill
               - albinvass/zuul
               - albinvass/fedora-python
-              - dhackz/wurg:
-                  exclude-unprotected-branches: false
+              - dhackz/wurg
 executor:
   imagePullPolicy: Always
   #image: zuul/zuul-executor:4.1.0
