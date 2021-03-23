@@ -1,6 +1,6 @@
 scheduler:
   imagePullPolicy: Always
-  image: zuul/zuul-scheduler:4.1.0
+  #image: zuul/zuul-scheduler:4.1.0
   config: |-
     [statsd]
     server=statsd-0.statsd
@@ -59,7 +59,7 @@ scheduler:
                   exclude-unprotected-branches: false
 executor:
   imagePullPolicy: Always
-  image: zuul/zuul-executor:4.1.0
+  #image: zuul/zuul-executor:4.1.0
   config: |-
     [statsd]
     server=statsd-0.statsd
@@ -88,7 +88,7 @@ executor:
     server=zuul-scheduler-0.zuul-scheduler
 web:
   imagePullPolicy: Always
-  image: zuul/zuul-web:4.1.0
+  #image: zuul/zuul-web:4.1.0
   config: |-
     [statsd]
     server=statsd-0.statsd
@@ -162,6 +162,10 @@ launcher:
             - name: ubuntu-groovy
               size: s-4vcpu-8gb
               cloud-image: ubuntu-groovy
+              # Dummy key to stop digital ocean from spamming emails
+              # about temporary root passwords.
+              ssh-keys:
+                - 28913272
               user-data: |
                 #cloud-config
 
