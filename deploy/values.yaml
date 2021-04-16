@@ -56,6 +56,7 @@ scheduler:
               - albinvass/zuul
               - albinvass/fedora-python
               - dhackz/wurg
+              - dhackz/ci-images
 executor:
   imagePullPolicy: Always
   #image: zuul/zuul-executor:4.1.0
@@ -152,7 +153,8 @@ launcher:
       region: fra1
       cloud-images:
         - name: ubuntu-groovy
-          image-id: "72067660"
+          image-filter:
+            id: 72067660
           username: zuul
       pools:
         - name: main
