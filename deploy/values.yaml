@@ -161,7 +161,7 @@ launcher:
           username: zuul
           image-filter:
             name: rust-1.47.0
-            private: true
+            public: false
       pools:
         - name: main
           max-servers: 8
