@@ -129,6 +129,7 @@ launcher:
     - name: alpine-pod
     - name: fedora-pod
     - name: ubuntu-groovy
+    - name: ubuntu-groovy-rust-1.47.0
     - name: ec2-t3-micro-ubuntu-20.04
     providers:
     - name: kubernetes-digitalocean
@@ -153,9 +154,14 @@ launcher:
       region: fra1
       cloud-images:
         - name: ubuntu-groovy
+          username: zuul
           image-filter:
             id: 72067660
+        - name: ubuntu-groovy-rust-1.47.0
           username: zuul
+          image-filter:
+            name: rust-1.47.0
+            private: true
       pools:
         - name: main
           max-servers: 8
@@ -176,6 +182,13 @@ launcher:
                     ssh_authorized_keys:
                       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDiMrbqfJf8c8MSne60fdxGTJQA1zLn67FRYxRZf6LeOjlUgQwZdrz8LA5f88BSzwm9uRh0mJTPwMKx0qe1fhuu9dy4GRGcL1Y2Rgg3IQqIScb0TyieLB+1J4EO5T+cFyPsh353p+7ZWq+/S0T5WtUB3VImGURwxzO6TvVaGnWs8HJtOsTQqmASBmIAVeN/f1lOK0jRg8MZji8LWU/LJzoH/+257Vhi8YpFe8G7W59cDW//h2ZwLtVdRvR1nYk4ZGyWKs9rh2RDOEslpOD0V1NMQgqB2YVd2Q13iKjqtO+EJKtX74jSe+xrpawOceULv9/3BOt+0eBKtjTkUTqPPo8maiarxzGsg+iuDYPPjYuwjJ61i4fADVMX7agBBX3t7f44rv1zTmdLGCzg+K5NqAue3fzP7EOozTlYL46+NLwBEOEFf75WQDp4GcCArS8oYxMrhSd/1na6HTYjtgiVyt+2xMR7jZns+9A+zuK614A4lH4eZKTc+nVUIHQ4mWkVi3s= avass@albin-xps159500
                       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDIbUUscEm4IJeTxlEJF1HdsLdipLpgx7w4ntgEii4PD4QBpR/8F2KS8wV62Md7wSpdCNx5oT6h57cOAWKQYU6oFtSqakSc8ULuEK+0rSmPsz4aV0Kqp1wqkmG35iU59MMkKqjDCFuIXH9yRgb6Y1QyNF2D4ZQmHZQMzM97FGjMeEQY/w54b8Sswu+3lCjgRX9+lXH12kt+EPRglKH4FgTVy+Lgl3n60mr0pinZYAXfVRVIdqadBaJHySTsNWaphKQtx7Enw+mk50a0THy/6cNHy+sOCLLwGqyExAuuMyystwNg63jZJA09jfai2vBwWPPCb9+ai6n8lDScPiptbDg55aLQBVztKFWIg8pfXXHp4vLFBUxfx4vSjyawDBcEFc59nUk6/MQNsBpZvUBHqS/Z6XURx35u91MBOw3upTCcXfbJpDGcpaEdAUMhrwrC1BdYuTAs/VmJuGMAspSTLymWp8GPMHhXUDtqGRgFMdCho83PZJrlnLKVEQ6vqLLmwbU= zuul
+            - name: ubuntu-groovy-rust-1.47.0
+              size: s-4vcpu-8gb
+              cloud-image: ubuntu-groovy-rust-1.47.0
+              # Dummy key to stop digital ocean from spamming emails
+              # about temporary root passwords.
+              ssh-keys:
+                - 28913272
     - name: aws-eu-north-1
       driver: aws
       region-name: eu-north-1
